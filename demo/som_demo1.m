@@ -179,7 +179,13 @@ clc
 D = rand(500,3);
 
 subplot(1,3,1), plot3(D(:,1),D(:,2),D(:,3),'+r')
-view(3), axis on, rotate3d on
+view(3), axis on
+
+% octave does not have rotate3d capability
+if ~exist('OCTAVE_VERSION', 'builtin')
+  rotate3d on
+end
+
 title('Data')
 
 %    The ROTATE3D command enables you to rotate the picture by

@@ -1,4 +1,4 @@
-function [S,m,l,t,s]=som_grid(varargin)
+function [S,m,li,t,s]=som_grid(varargin)
 
 %SOM_GRID Visualization of a SOM grid
 %
@@ -299,7 +299,7 @@ function [S,m,l,t,s]=som_grid(varargin)
 %% Init %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 True=1; False=0;                % const.
-m=[]; l=[]; t=[]; s=[];         % default values for outputs
+m=[]; li=[]; t=[]; s=[];         % default values for outputs
 Ref=som_set('som_grid');        % reference struct
 
 num_of_args=length(varargin);   % numb. of varargins
@@ -547,29 +547,36 @@ if fixedline,
   % Line properties are fixed: draw fast, but
   % if line is set to 'none' set empty handle ans skip
   if strcmp(S.line,'none')
-    l={};
+    li={}; % using li is better than l for readability
   else
     p1=reshape(S.coord, [S.msize 3]);
     p2=zeros(size(p1)-[0 1 0]);
     p2(1:2:end,:,:)=p1(1:2:end,2:end,:);
     p2(2:2:end,:,:)=p1(2:2:end,1:end-1,:);
     
-    l{1}=plot3(p1(:,:,1), p1(:,:,2), p1(:,:,3), ...
+    li{1}=plot3(p1(:,:,1), p1(:,:,2), p1(:,:,3), ...
 	       'Color', S.linecolor(1,:), ...
 	       'LineWidth', S.linewidth(1), ...
 	       'LineStyle', S.line);
-    l{2}=plot3(p1(:,:,1)', p1(:,:,2)', p1(:,:,3)', ...
+    li{2}=plot3(p1(:,:,1)', p1(:,:,2)', p1(:,:,3)', ...
 	       'Color', S.linecolor(1,:), ...
 	       'LineWidth', S.linewidth(1), ...
 	       'LineStyle', S.line);
     if hexa,
-      l{3}=plot3(p2(:,:,1), p2(:,:,2), p2(:,:,3), ...
+      li{3}=plot3(p2(:,:,1), p2(:,:,2), p2(:,:,3), ...
 		 'Color', S.linecolor(1,:), ...
 		 'LineWidth', S.linewidth(1), ...
 		 'LineStyle', S.line);
     end
   end
-  l=cat(1,l{:});
+
+% for an undetermined reason, plot3 does not result in similar matrices in octave and matlab  
+   if exist('OCTAVE_VERSION', 'builtin')
+     li = [li{:}]';
+   else
+     li=cat(1,li{:});
+   end
+   
 else
    % Variable properties: draw connection by connection
    
@@ -584,26 +591,26 @@ else
    end
    if ndims(S.linecolor) ~=  3
      if ischar(S.linecolor)  
-       l=plot3(x, y, z, ...
+       li=plot3(x, y, z, ...
 	       'Color', S.linecolor, ...
 	       'LineWidth', linewidth, ...
 	       'LineStyle',S.line);
      else 
        if iscell(S.linecolor)
          lcolor=[S.linecolor{1}(1,1) S.linecolor{2}(1,1) S.linecolor{3}(1,1)];
-         l=plot3(x, y, z, ...
+         li=plot3(x, y, z, ...
 		 'Color', lcolor, ...
 		 'LineWidth', linewidth, ...
 		 'LineStyle',S.line);
        else
-         l=plot3(x, y, z, ...
+         li=plot3(x, y, z, ...
                  'Color', S.linecolor(1,:), ...
                  'LineWidth', linewidth, ...
                  'LineStyle',S.line);
        end
      end
    else
-     l=plot3(x, y, z, ...
+     li=plot3(x, y, z, ...
 	     'Color', S.linecolor(1,1,:), ...
 	     'LineWidth', linewidth, ...
 	     'LineStyle',S.line);
@@ -645,7 +652,7 @@ else
 	  'MarkerEdgeColor', S.markercolor(1,:));
 end
 
-L=length(l); 
+L=length(li); 
 n=munits;
 
 %%% Set variable properties %%%
@@ -657,11 +664,11 @@ if length(S.linewidth)>1
 
    % Handle zero width
    iszero=(lwidth == 0);lwidth(iszero)=0.5;
-   for i=1:length(l),
-     set(l(i),'LineWidth', lwidth(i));
+   for i=1:length(li),
+     set(li(i),'LineWidth', lwidth(i));
    end
    if ~isempty(iszero), % zero width
-      set(l(iszero),'Visible','off');
+      set(li(iszero),'Visible','off');
    end
 end
 
@@ -671,19 +678,19 @@ if size(S.linecolor,1)>1 || iscell(S.linecolor)
    if length(size(S.linecolor)) == 3 || iscell(S.linecolor) 
      if ~iscell(S.linecolor)
        for i=1:L
-         set(l(i),'Color',S.linecolor(I(i),J(i),:));
+         set(li(i),'Color',S.linecolor(I(i),J(i),:));
        end
      else
        for i=1:L
          lcolor=[S.linecolor{1}(I(i),J(i)),...
                  S.linecolor{2}(I(i),J(i)),...
                  S.linecolor{3}(I(i),J(i))];
-         set(l(i),'Color',lcolor);
+         set(li(i),'Color',lcolor);
        end
      end
    else
      for i=1:L,
-       set(l(i),'Color', S.linecolor(I(i),:));
+       set(li(i),'Color', S.linecolor(I(i),:));
      end
    end
 end

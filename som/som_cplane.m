@@ -443,7 +443,7 @@ end                         % to pos
 %% Set axes properties  
 %% Command view([0 90]) shows the map in 2D properly oriented
 
-ax=newplot;                               % set new plot
+ax=newplot();                               % set new plot
 vis_PlaneAxisProperties(ax,lattice,msize,pos);
 
 %% Draw the map! 

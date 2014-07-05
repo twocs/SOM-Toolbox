@@ -491,7 +491,11 @@ for i=1:n,                         % main loop
   %%% Draw colorbars if they are turned on and the plane is umat or c-plane
 
   if General.comp(i)> -1 && ~strcmp(General.colorbardir,'none'),
-    h_colorbar(i,1)=colorbar(General.colorbardir);           % colorbars
+    if(strcmp(General.colorbardir,'vert')) % default is 'vert' but Octave doesn't handle "colorbar('vert')"
+      h_colorbar(i,1)=colorbar();           % colorbars
+    else
+      h_colorbar(i,1)=colorbar(General.colorbardir);           % colorbars
+    end
   else
     h_colorbar(i,1)=-1;
     General.comp(i)=-1;

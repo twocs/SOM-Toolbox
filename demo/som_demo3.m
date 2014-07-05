@@ -83,7 +83,11 @@ sM = som_make(sD);
 
 plot3(sD.data(:,1),sD.data(:,2),sD.data(:,3),'ro',...
       sM.codebook(:,1),sM.codebook(:,2),sM.codebook(:,3),'k+')
-rotate3d on
+      
+% octave does not have rotate3d capability
+if ~exist('OCTAVE_VERSION', 'builtin')
+  rotate3d on
+end
 
 %    From the visualization it is pretty easy to see what the data is
 %    like, and how the prototypes have been positioned. One can see
@@ -114,7 +118,11 @@ plot3(sD.data(1:100,1),sD.data(1:100,2),sD.data(1:100,3),'ro',...
       sD.data(101:200,1),sD.data(101:200,2),sD.data(101:200,3),'go',...
       sD.data(201:300,1),sD.data(201:300,2),sD.data(201:300,3),'bo',...
       sM.codebook(:,1),sM.codebook(:,2),sM.codebook(:,3),'k+')
-rotate3d on
+
+% octave does not have rotate3d capability but MATLAB does
+if ~exist('OCTAVE_VERSION', 'builtin')
+  rotate3d on
+end
 
 %    However, this works only for relatively small dimensionality, say
 %    less than 10. When the information is added this way, the
