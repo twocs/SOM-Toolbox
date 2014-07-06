@@ -1,6 +1,6 @@
 function [sMap,D] = som_make(D, varargin)
 
-% lisää impbatch algoritm-valinnaksi (default = batch)
+% lisaa impbatch algoritm-valinnaksi (default = batch) %% extended character causes error... is it Finnish? What does it mean?
 
 %SOM_MAKE Create, initialize and train Self-Organizing Map.
 %

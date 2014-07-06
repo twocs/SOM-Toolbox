@@ -612,12 +612,14 @@ for i=1:2:length(args),
   case {'umat','umati'}
     %%% Check first the possible cell input
     
+    %@ta why does this work in MATLAB but not Octave????
+    
     if iscell(value),
-      if ~ismatrix(value) || any(size(value) ~= [1 2]) || ...
-	    ~vis_valuetype(value{2},{'string'}),
-	error('Cell input for ''umat'' has to be of form {vector, string}.');
+      if ~ismatrix(value) || any(size(value) ~= [1 2]) || ~vis_valuetype(value{2},{'string'})
+        error('Cell input for ''umat'' has to be of form {vector, string}.'); % @ta Octave throws error
       else
-	name=value{2}; value=value{1};
+        name=value{2}; 
+        value=value{1};
       end
     else 
       name='U-matrix'; % no cell: default title is set
