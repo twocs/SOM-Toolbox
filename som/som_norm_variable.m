@@ -247,8 +247,7 @@ if ischar(method)
   else 
     method = cellstr(method); 
   end
-end
-if iscell(method), 
+elseif iscell(method), 
   if length(method)==1 && isstruct(method{1}), sNorm = method{1}; 
   else
     if length(method)==1 || isempty(method{2}), method{2} = 'x'; end
