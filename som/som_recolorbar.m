@@ -305,9 +305,11 @@ for i=1:length(handles),                   % MAIN LOOP BEGINS
           axes(h_(i));
           xlabel(ch);
           axes(mem_axes);
-      else
+      elseif verLessThan('matlab', '9.1')
           lbl = get(h_(i), 'Label');
           lbl.String = ch;
+      else
+	  set(get(h_(i), 'title'), 'string', ch);
       end
     end
   end
